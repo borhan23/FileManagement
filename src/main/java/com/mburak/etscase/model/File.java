@@ -17,13 +17,20 @@ public class File {
     private String fileType;
 
     @Column(name = "file_size", nullable = false)
-    private String fileSize;
+    private Long fileSize;
 
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
     @Lob
     private byte[] fileData;
+
+    public File(String fileName, String fileType, long fileSize, byte[] fileData) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+        this.fileData = fileData;
+    }
 
     public String getFileName() {
         return fileName;
@@ -41,11 +48,11 @@ public class File {
         this.fileType = fileType;
     }
 
-    public String getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
