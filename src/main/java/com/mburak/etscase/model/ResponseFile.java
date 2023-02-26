@@ -1,17 +1,30 @@
 package com.mburak.etscase.model;
 
 public class ResponseFile {
-    private long id;
+    private Long id;
     private String fileName;
     private String filePath;
     private String fileType;
     private Long fileSize;
+    private byte[] fileData;
 
-    public long getId() {
+    public ResponseFile(byte[] fileData){
+        this.fileData = fileData;
+    }
+
+    public ResponseFile(String fileName, String fileType, Long fileSize, String filePath, byte[] fileData){
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+        this.filePath = filePath;
+        this.fileData = fileData;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,4 +60,11 @@ public class ResponseFile {
         this.filePath = filePath;
     }
 
+    public byte[] getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(byte[] fileData) {
+        this.fileData = fileData;
+    }
 }
