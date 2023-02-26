@@ -8,7 +8,7 @@ public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long  id;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;
@@ -30,6 +30,10 @@ public class File {
         this.fileType = fileType;
         this.fileSize = fileSize;
         this.fileData = fileData;
+    }
+
+    public File(){
+
     }
 
     public String getFileName() {
@@ -72,11 +76,11 @@ public class File {
         this.fileData = fileData;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
