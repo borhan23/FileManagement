@@ -62,7 +62,12 @@ public class FileController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessage> deleteFile(@PathVariable long id){
-        return null;
+        try {
+            fileService.deleteFileById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Deleted the file successfully."));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Deleting file is not exist."));
+        }
     }
 
 
