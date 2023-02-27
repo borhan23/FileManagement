@@ -48,7 +48,7 @@ public class File {
         return fileType;
     }
 
-    public void setFileType(String fileExtension) {
+    public void setFileType(String fileType) {
         this.fileType = fileType;
     }
 
