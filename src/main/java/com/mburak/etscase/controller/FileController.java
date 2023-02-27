@@ -61,7 +61,7 @@ public class FileController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseMessage> deleteFile(@PathVariable long id){
+    public ResponseEntity<ResponseMessage> deleteFileById(@PathVariable long id){
         try {
             fileService.deleteFileById(id);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Deleted the file successfully."));
@@ -70,6 +70,14 @@ public class FileController {
         }
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseMessage> replaceFileById(@PathVariable long id, @RequestBody() MultipartFile file){
+        try {
+            fileService.replaceFileById(id, file);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Replaced the file successfully."));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("File id is not exist."));
+        }
+    }
 
 }

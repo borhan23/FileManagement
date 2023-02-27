@@ -1,11 +1,8 @@
 package com.mburak.etscase.services;
 
-import com.mburak.etscase.exception.FileExceptionHandler;
 import com.mburak.etscase.model.File;
 import com.mburak.etscase.model.ResponseFile;
 import com.mburak.etscase.repository.FileRepository;
-import com.mburak.etscase.validator.FileValidator;
-import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,7 +50,7 @@ public class FileService {
     public void saveFile(MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         File fileModel = new File(fileName, file.getContentType(), file.getSize(), file.getBytes());
-        fileModel.setFilePath(ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/").path(fileName).toUriString());
+        fileModel.setFilePath(ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(fileName).toUriString());
         fileRepository.save(fileModel);
     }
 
@@ -74,4 +70,17 @@ public class FileService {
         return fileResponse;
     }
 
+    public File replaceFileById(long id, MultipartFile file) {
+        Optional<File> fileOptional = fileRepository.findById(id);
+        if (fileOptional.isPresent()) {
+            File fileEntity = fileOptional.get();
+            fileEntity.setFileName(file.getOriginalFilename());
+            fileEntity.setFileSize(file.getSize());
+            fileEntity.setFileType(file.getContentType());
+            fileEntity.setFilePath(ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(file.getOriginalFilename()).toUriString());
+            return fileRepository.save(fileEntity);
+        } else {
+            return null;
+        }
+    }
 }
