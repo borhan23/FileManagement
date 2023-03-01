@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0-oas3
+  title: File Management REST API
+  description: File upload, list, delete and replace
+servers:
+  - url: https://virtserver.swaggerhub.com/BORHAN96/file.management/1.0.0
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+  schemas:
+    File:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        fileName:
+          type: string
+          example: pexels-kelvin-valerio-617278.jpg
+        fileSize:
+          type: integer
+          format: int64
+          example: 2068006
+        fileType:
+          type: string
+          example: image/jpeg
+        filePath:
+          type: string
+          example: http://localhost:8082/download/pexels-kelvin-valerio-617278.jpg
+        fileData:
+          type: string
+          format: byte
+          example: >-
+            /9j/4AAQSkZJRgABAQEASABIAA4gxYSUNDX1BST0ZJTEUAAQEAAAxITGlubwIQAABtbnRyUkdCIFhZWiAHz
+paths:
+  /login:
+    post:
+      summary: Login
+      description: Authenticate and get a token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: anakin
+                password:
+                  type: string
+                  example: password
+        description: The username and password to authenticate
+        required: true
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmFraW4iLCJpYXQiOjE2Nzc2OTg5NjAsImV4cCI6MTY3NzczNDk2MH0
+                    description: The token to use for subsequent requests
+  /files:
+    get:
+      summary: Get all files
+      description: Get a list of all files
+      security:
+        - bearerAuth: []
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+  /files/upload:
+    post:
+      summary: Upload a file
+      description: Upload a new file to the database
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: The file to upload
+                  type: string
+                  format: binary
+              required:
+                - file
+        required: true
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Uploaded the file successfully, fileName
+        '415':
+          description: Unsupported file type
+  /files/{id}:
+    get:
+      summary: Get a file by ID
+      description: Get a file by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the file to get
+          schema:
+            type: string
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '404':
+          description: File not found
+    delete:
+      summary: Delete a file by ID
+      description: Delete a file from the database by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the file to delete
+          schema:
+            type: string
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Successful operation
+        '404':
+          description: File not found
+    put:
+      summary: Replace a file by ID
+      description: Replace a file in the database with a new one by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the file to replace
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+        required: true
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Successful operation
+        '404':
+          description: File not found
+  /files/{id}/content:
+    get:
+      summary: Get a file content by ID
+      description: Get a file content by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the file to get
+          schema:
+            type: string
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fileData:
+                    type: string
+                    format: byte
+                    example: >-
+                      /9j/4AAQSkZJRgABAQEASABIAA4gxYSUNDX1BST0ZJTEUAAQEAAAxITGlubwIQAABtbnRyUkdCIFhZWiAHz
+        '404':
+          description: File not found
