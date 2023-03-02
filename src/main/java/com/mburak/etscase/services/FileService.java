@@ -23,12 +23,18 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
+    /*
+    All Files can be retrieved from database with all attributes.
+     */
     public List<ResponseFile> getAllfile() {
         List<File> files = fileRepository.findAll();
         return files.stream().map(this::mapToFileResponse)
                 .collect(Collectors.toList());
     }
 
+    /*
+    Only File's content can be retrieved from database by file id. It will be displayed as a byte array.
+     */
     public byte[] getFileContentById(Long id) {
         Optional<File> fileOptional = fileRepository.findById(id);
         if (fileOptional.isPresent()){
@@ -38,6 +44,9 @@ public class FileService {
         }
     }
 
+    /*
+    File's all properties can be retrieved from database by file id.
+     */
     public ResponseFile getFileAttributesById(Long id) {
         Optional<File> fileOptional = fileRepository.findById(id);
         if (fileOptional.isPresent()) {
@@ -47,6 +56,9 @@ public class FileService {
         }
     }
 
+    /*
+    File can be uploaded to the database with this service. File stored in the /download path to download on the future.
+     */
     public void saveFile(MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         File fileModel = new File(fileName, file.getContentType(), file.getSize(), file.getBytes());
@@ -58,18 +70,9 @@ public class FileService {
         fileRepository.deleteById(id);
     }
 
-    private ResponseFile mapToFileResponse(File file) {
-        ResponseFile fileResponse = new ResponseFile(file.getFileName(), file.getFileType(), file.getFileSize(), file.getFilePath(), file.getFileData());
-        fileResponse.setId(file.getId());
-        fileResponse.setFileName(file.getFileName());
-        fileResponse.setFileType(file.getFileType());
-        fileResponse.setFileSize(file.getFileSize());
-        fileResponse.setFilePath(file.getFilePath());
-        fileResponse.setFileData(file.getFileData());
-
-        return fileResponse;
-    }
-
+    /*
+    A file can be replaced with current files which are stored in the db.
+     */
     public File replaceFileById(long id, MultipartFile file) {
         Optional<File> fileOptional = fileRepository.findById(id);
         if (fileOptional.isPresent()) {
@@ -82,5 +85,21 @@ public class FileService {
         } else {
             return null;
         }
+    }
+
+    /*
+     Don't want to expose the entire File entity to the client, which may contain sensitive information that we don't want to disclose.
+     File entities will map to fileResponse entity to view in client side.
+     */
+    private ResponseFile mapToFileResponse(File file) {
+        ResponseFile fileResponse = new ResponseFile(file.getFileName(), file.getFileType(), file.getFileSize(), file.getFilePath(), file.getFileData());
+        fileResponse.setId(file.getId());
+        fileResponse.setFileName(file.getFileName());
+        fileResponse.setFileType(file.getFileType());
+        fileResponse.setFileSize(file.getFileSize());
+        fileResponse.setFilePath(file.getFilePath());
+        fileResponse.setFileData(file.getFileData());
+
+        return fileResponse;
     }
 }

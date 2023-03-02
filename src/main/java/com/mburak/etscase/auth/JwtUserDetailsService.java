@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+    /*
+    To load user-specific data during the authentication process.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if ("anakin".equals(username)) {

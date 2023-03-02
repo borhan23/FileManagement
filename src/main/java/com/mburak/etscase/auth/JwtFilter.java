@@ -22,6 +22,10 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private TokenManager tokenManager;
 
+    /*
+    This is a method for a Spring Security Filter that is used to intercept incoming requests and
+    authenticate them based on the presence of a JWT (JSON Web Token) in the Authorization header.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)

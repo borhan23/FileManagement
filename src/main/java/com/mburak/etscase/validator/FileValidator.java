@@ -1,8 +1,5 @@
 package com.mburak.etscase.validator;
 
-import org.springframework.http.MediaType;
-import org.springframework.validation.Validator;
-
 public class FileValidator {
 
     public static boolean isSupportedContentType(String contentType) {
