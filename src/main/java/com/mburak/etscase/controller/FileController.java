@@ -1,26 +1,21 @@
 package com.mburak.etscase.controller;
 
-import com.mburak.etscase.exception.FileExceptionHandler;
-import com.mburak.etscase.model.File;
 import com.mburak.etscase.model.ResponseFile;
 import com.mburak.etscase.message.ResponseMessage;
 import com.mburak.etscase.services.FileService;
 import com.mburak.etscase.validator.FileValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("files")
+@CrossOrigin(origins = {"http://localhost:4200"},methods = {RequestMethod.GET, RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT})
 public class FileController {
 
     private final FileService fileService;
