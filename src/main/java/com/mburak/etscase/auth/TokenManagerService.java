@@ -15,6 +15,9 @@ public class TokenManagerService {
     private static final int validity = 5 * 60 * 1000;
     Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+    /*
+    To generate the token with token's attributes.
+     */
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -25,6 +28,9 @@ public class TokenManagerService {
                 .compact();
     }
 
+    /*
+    To validate the token expiration time and user.
+     */
     public boolean tokenValidate(String token) {
         if (getUserFromToken(token) != null && isExpired(token)) {
             return true;

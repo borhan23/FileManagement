@@ -43,6 +43,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    /*
+     It configures the HTTP security for the application. This defines to authorization api method which is only with /login endpoint.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
